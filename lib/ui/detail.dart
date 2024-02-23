@@ -15,9 +15,12 @@ class Detail extends StatelessWidget {
   Widget build(BuildContext context) {
     return new Scaffold(
       appBar: AppBar(
-          elevation: 20.0,
-          backgroundColor: new Color(0xFFC67A7D),
-          title: Text('Questions')),
+        elevation: 20.0,
+        backgroundColor: Color(0xff1764db),
+        title: Text(
+          'Questions',
+        ),
+      ),
       body: Flex(
         direction: Axis.vertical,
         children: <Widget>[
@@ -27,10 +30,13 @@ class Detail extends StatelessWidget {
               decoration: BoxDecoration(
                   gradient: LinearGradient(
                 colors: <Color>[
-                  new Color(0xFFC67A7D),
-                  new Color(0xFF5D3068),
+                  new Color(0xFF2343DC),
+                  new Color(0xFF0969CF),
+                  new Color(0xFF2577ED),
+                  new Color(0xFF12B6D3),
+                  new Color(0xFF01B7DC),
                 ],
-                stops: [0.0, 0.9],
+                // stops: [1.0,1.0,0.9],
                 begin: const FractionalOffset(0.0, 0.0),
                 end: const FractionalOffset(0.0, 1.0),
               )),
@@ -122,7 +128,10 @@ class Detail extends StatelessWidget {
                       style: Style.commonTextStyle,
                     ),
                     trailing: IconButton(
-                      icon: Icon(Icons.share, color: Color(0xFF56cfdf)),
+                      icon: Icon(
+                        Icons.share,
+                        color: Color(0xFF56cfdf),
+                      ),
                       iconSize: 18.0,
                       onPressed: () => share(quest),
                     ),

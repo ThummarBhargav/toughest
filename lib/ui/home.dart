@@ -14,92 +14,161 @@ class Home extends StatefulWidget {
 }
 
 class HomeState extends State<Home> with TickerProviderStateMixin {
-  final GlobalKey<SideMenuState> _sideMenuKey = GlobalKey<SideMenuState>();
   var data;
-
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
-    return SideMenu(
-      key: _sideMenuKey,
-      background: Colors.purple.shade300,
-      menu: buildMenu(),
-      type: SideMenuType.shrinkNSlide,
-      child: new Scaffold(
-        appBar: new AppBar(
-          elevation: 10.0,
-          centerTitle: true,
-          backgroundColor: Colors.white,
-          leading: new GestureDetector(
-            child: const Icon(
-              Icons.menu,
-              color: Colors.black,
+    return Scaffold(
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(AppBar().preferredSize.height),
+        child: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: <Color>[
+                new Color(0xFF2343DC),
+                new Color(0xFF01B7DC),
+              ],
+              begin: const FractionalOffset(0.0, 0.0),
+              end: const FractionalOffset(0.0, 1.0),
             ),
-            onTap: () {
-              final _state = _sideMenuKey.currentState!;
-              if (_state.isOpened) {
-                _state.closeSideMenu();
-              } else {
-                _state.openSideMenu();
-              }
-            },
           ),
-          title: new Text(
-            'TOUGHEST',
-            style: TextStyle(color: Colors.black),
+          child: AppBar(
+            elevation: 10.0,
+            centerTitle: true,
+            actions: [
+              IconButton(
+                icon: Icon(Icons.menu),
+                onPressed: () {},
+              ),
+            ],
+            backgroundColor: Colors.transparent,
+            title: Text('TOUGHEST'),
           ),
         ),
-        body: ListView(
-          children: <Widget>[
+      ),
+      // appBar: AppBar(
+      //   elevation: 10.0,
+      //   centerTitle: true,
+      //   backgroundColor: Colors.white,
+      //   leading: GestureDetector(
+      //     child: Icon(
+      //       Icons.menu,
+      //       color: Colors.black,
+      //     ),
+      //     onTap: () {
+      //       // final _state = _sideMenuKey.currentState!;
+      //       // if (_state.isOpened) {
+      //       //   _state.closeSideMenu();
+      //       // } else {
+      //       //   _state.openSideMenu();
+      //       // }
+      //     },
+      //   ),
+      //   title: new Text(
+      //     'TOUGHEST',
+      //     style: TextStyle(color: Colors.black),
+      //   ),
+      // ),
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
             Container(
               key: Key('banner'),
               padding: EdgeInsets.only(bottom: 5.0),
-              height: height / 2.5,
+              height: height / 3,
               child: myCarousel,
             ),
-            getListItems(Color(0xFFF1B136), Icons.person, 'Behavioural Based'),
-            getListItems(Color(0xFF885F7F), Icons.wc, 'Communications Based'),
-            getListItems(Color(0xFF13B0A5), Icons.call_split, 'Opinion Based'),
-            getListItems(
-                Color(0xFFD0C490), Icons.assessment, 'Performance Based'),
-            getListItems(Color(0xFFEF6363), Icons.help_outline, 'Brainteasers'),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Expanded(
+                  child: InkWell(
+                    onTap: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => Detail(
+                                title: 'Behavioural Based',
+                              )));
+                    },
+                    child: Image.asset(
+                      'assets/images/Behavioural Based.png',
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: 10,
+                ),
+                Expanded(
+                  child: InkWell(
+                    onTap: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => Detail(
+                                title: 'Situational Based',
+                              )));
+                    },
+                    child: Image.asset(
+                      'assets/images/communications Based.png',
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Expanded(
+                  child: InkWell(
+                    onTap: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => Detail(
+                                title: 'Opinion Based',
+                              )));
+                    },
+                    child: Image.asset(
+                      'assets/images/opinion Based.png',
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: 10,
+                ),
+                Expanded(
+                  child: InkWell(
+                    onTap: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => Detail(
+                                title: 'Performance Based',
+                              )));
+                    },
+                    child: Image.asset(
+                      'assets/images/performance Based.png',
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            InkWell(
+              onTap: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => Detail(
+                          title: 'Brainteasers',
+                        )));
+              },
+              child: Image.asset(
+                'assets/images/Brainteasers.png',
+              ),
+            ),
           ],
         ),
       ),
     );
-  }
-
-  ///Lis-t of interview questions.
-  Widget getListItems(Color color, IconData icon, String title) {
-    return GestureDetector(
-        key: title == 'Behavioural Based' ? Key('item') : null,
-        child: Container(
-          margin: EdgeInsets.all(10),
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(30), color: color),
-          height: 300.0,
-          child: Center(
-              child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Icon(
-                icon,
-                size: 100.0,
-                color: Colors.white,
-              ),
-              Text(
-                title,
-                style: Style.headerstyle,
-              )
-            ],
-          )),
-        ),
-        onTap: () {
-          Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => Detail(
-                    title: title,
-                  )));
-        });
   }
 
   ///creating a carousel using carousel pro library.

@@ -14,36 +14,61 @@ class Home extends StatefulWidget {
 }
 
 class HomeState extends State<Home> with TickerProviderStateMixin {
-  final GlobalKey<SideMenuState> _sideMenuKey = GlobalKey<SideMenuState>();
   var data;
-
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     return Scaffold(
-      appBar: AppBar(
-        elevation: 10.0,
-        centerTitle: true,
-        backgroundColor: Colors.white,
-        leading: GestureDetector(
-          child: Icon(
-            Icons.menu,
-            color: Colors.black,
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(AppBar().preferredSize.height),
+        child: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: <Color>[
+                new Color(0xFF2343DC),
+                new Color(0xFF01B7DC),
+              ],
+              begin: const FractionalOffset(0.0, 0.0),
+              end: const FractionalOffset(0.0, 1.0),
+            ),
           ),
-          onTap: () {
-            // final _state = _sideMenuKey.currentState!;
-            // if (_state.isOpened) {
-            //   _state.closeSideMenu();
-            // } else {
-            //   _state.openSideMenu();
-            // }
-          },
-        ),
-        title: new Text(
-          'TOUGHEST',
-          style: TextStyle(color: Colors.black),
+          child: AppBar(
+            elevation: 10.0,
+            centerTitle: true,
+            actions: [
+              IconButton(
+                icon: Icon(Icons.menu),
+                onPressed: () {},
+              ),
+            ],
+            backgroundColor: Colors.transparent,
+            title: Text('TOUGHEST'),
+          ),
         ),
       ),
+      // appBar: AppBar(
+      //   elevation: 10.0,
+      //   centerTitle: true,
+      //   backgroundColor: Colors.white,
+      //   leading: GestureDetector(
+      //     child: Icon(
+      //       Icons.menu,
+      //       color: Colors.black,
+      //     ),
+      //     onTap: () {
+      //       // final _state = _sideMenuKey.currentState!;
+      //       // if (_state.isOpened) {
+      //       //   _state.closeSideMenu();
+      //       // } else {
+      //       //   _state.openSideMenu();
+      //       // }
+      //     },
+      //   ),
+      //   title: new Text(
+      //     'TOUGHEST',
+      //     style: TextStyle(color: Colors.black),
+      //   ),
+      // ),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,

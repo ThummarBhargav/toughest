@@ -2,6 +2,10 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:shrink_sidemenu/shrink_sidemenu.dart';
+import 'package:toughest_new/constants/AdsManager/ad_services.dart';
+import 'package:toughest_new/constants/AdsManager/app_lifecycle_reactor.dart';
+import 'package:toughest_new/constants/AdsManager/app_open_ad_manager.dart';
+import 'package:toughest_new/main.dart';
 import 'package:toughest_new/ui/detail.dart';
 import 'package:toughest_new/commons/textStyle.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -15,6 +19,24 @@ class Home extends StatefulWidget {
 
 class HomeState extends State<Home> with TickerProviderStateMixin {
   var data;
+  AppLifecycleReactor? appLifecycleReactor;
+
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+
+      // Ads Loading
+      await getIt<AdService>().initBannerAds(context);
+      await getIt<AdService>().loadInterstitialAd();
+      AppOpenAdManager appOpenAdManager = AppOpenAdManager()..loadAd();
+      appLifecycleReactor = AppLifecycleReactor(appOpenAdManager: appOpenAdManager);
+      if(appLifecycleReactor!=null){
+        appLifecycleReactor!.listenToAppStateChanges();
+      }
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
@@ -168,6 +190,11 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
           ],
         ),
       ),
+      bottomNavigationBar: banner == true
+          ? getIt<AdService>().isBannerLoaded == true
+          ? getIt<AdService>().getBannerAds()
+          : SizedBox()
+          : SizedBox()
     );
   }
 

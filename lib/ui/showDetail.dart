@@ -83,10 +83,25 @@ class ShowDetailState extends State<ShowDetail> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        elevation: 10.0,
-        backgroundColor: Color(0xFFC67A7D),
-        title: Text('Answer'),
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(AppBar().preferredSize.height),
+        child: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: <Color>[
+                new Color(0xFF2343DC),
+                new Color(0xFF01B7DC),
+              ],
+              begin: const FractionalOffset(0.0, 0.0),
+              end: const FractionalOffset(0.0, 1.0),
+            ),
+          ),
+          child: AppBar(
+            elevation: 10.0,
+            backgroundColor: Colors.transparent,
+            title: Text('Answer'),
+          ),
+        ),
       ),
       body: ListView(
         padding: EdgeInsets.all(8),
@@ -129,28 +144,41 @@ class ShowDetailState extends State<ShowDetail> with TickerProviderStateMixin {
             ),
           ]),
           SizedBox(height: 20),
-          MyElevatedButton(
-            padding: EdgeInsets.all(5),
-            shape: BeveledRectangleBorder(
-              borderRadius: new BorderRadius.circular(5.0),
+          Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: <Color>[
+                  new Color(0xFF2343DC),
+                  new Color(0xFF01B7DC),
+                ],
+                begin: const FractionalOffset(0.0, 0.0),
+                end: const FractionalOffset(0.0, 1.0),
+              ),
+              borderRadius: BorderRadius.circular(7.0),
             ),
-            splashColor: const Color(0xff382151),
-            elevation: 10.0,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Text(
-                  "Share answer with your friends",
-                  style: Style.regularTextStyle,
-                ),
-                SizedBox(
-                  width: 10,
-                ),
-                Icon(Icons.share),
-              ],
+            child: MyElevatedButton(
+              padding: EdgeInsets.all(5),
+              shape: BeveledRectangleBorder(
+                borderRadius: new BorderRadius.circular(5.0),
+              ),
+              splashColor: const Color(0xff382151),
+              elevation: 0.0,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Text(
+                    "Share answer with your friends",
+                    style: Style.regularTextStyle.copyWith(color: Colors.white),
+                  ),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  Icon(Icons.share, color: Colors.white, size: 20.0),
+                ],
+              ),
+              color: Colors.transparent,
+              onPressed: () => share(widget.quest, widget.ans),
             ),
-            color: Color(0xFF56cfdf),
-            onPressed: () => share(widget.quest, widget.ans),
           ),
           SizedBox(height: 20.0),
         ],

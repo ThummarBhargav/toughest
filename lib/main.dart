@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:gdpr_dialog/gdpr_dialog.dart';
 import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:get_it/get_it.dart';
 import 'package:get_storage/get_storage.dart';
@@ -84,6 +85,9 @@ class _HomeState extends State<Home> {
       } on PlatformException catch (e) {
         print(e);
       }
+      await GdprDialog.instance.showDialog(isForTest: false, testDeviceId: '').then((onValue) {
+        print('result === $onValue');
+      });
     });
     super.initState();
   }

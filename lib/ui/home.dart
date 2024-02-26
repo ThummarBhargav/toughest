@@ -99,7 +99,7 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
                 ),
               ],
               backgroundColor: Colors.transparent,
-              title: Text('Smart skills Learn and Grow'),
+              title: Text('Smart Learning - Skill Growth'),
             ),
           ),
         ),
@@ -289,14 +289,14 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
   _sharer() {
     if (Platform.isIOS) {
       Share.share(
-          "Skills 101/Smart skills Learn and Grow - Test your knowledge.\n" +
+          "Skills 101/Smart Learning - Skill Growth - Test your knowledge.\n" +
               "The app that will make you an amazing candidate for any job.\n"
                   "Are you ready?\n"
                   "Download it now\n"
                   "https://apps.apple.com/in/app/smart-skills-learn-and-grow/id6475261140");
     } else {
       Share.share(
-          "Skills 101/Smart skills Learn and Grow - Test your knowledge.\n" +
+          "Skills 101/Smart Learning - Skill Growth - Test your knowledge.\n" +
               "The app that will make you an amazing candidate for any job.\n"
                   "Are you ready?\n"
                   "Download it now\n"

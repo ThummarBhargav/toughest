@@ -1,6 +1,10 @@
+import 'dart:io';
+
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:package_info_plus/package_info_plus.dart';
+import 'package:rate_my_app/rate_my_app.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:toughest_new/constants/AdsManager/ad_services.dart';
 import 'package:toughest_new/constants/AdsManager/app_lifecycle_reactor.dart';
@@ -21,6 +25,22 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
   var data;
   final GlobalKey<ScaffoldState> _sideMenuKey = GlobalKey<ScaffoldState>();
   AppLifecycleReactor? appLifecycleReactor;
+  RateMyApp rateMyApp = RateMyApp(
+    preferencesPrefix: 'rateMyApp_',
+    minDays: 7,
+    minLaunches: 10,
+    remindDays: 7,
+    remindLaunches: 10,
+    googlePlayIdentifier: 'interview.preparation.question.answer',
+  );
+  PackageInfo packageInfo = PackageInfo(
+    appName: 'Unknown',
+    packageName: 'Unknown',
+    version: 'Unknown',
+    buildNumber: 'Unknown',
+    buildSignature: 'Unknown',
+    installerStore: 'Unknown',
+  );
 
   @override
   void initState() {
@@ -29,11 +49,20 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
       await getIt<AdService>().initBannerAds(context);
       await getIt<AdService>().loadInterstitialAd();
       AppOpenAdManager appOpenAdManager = AppOpenAdManager()..loadAd();
-      appLifecycleReactor =
-          AppLifecycleReactor(appOpenAdManager: appOpenAdManager);
+      appLifecycleReactor = AppLifecycleReactor(appOpenAdManager: appOpenAdManager);
       if (appLifecycleReactor != null) {
         appLifecycleReactor!.listenToAppStateChanges();
       }
+
+      bool shouldShow = await shouldShowPopup();
+      if (shouldShow) {
+        rateMyApp.init().then((value) {
+          ShowRateUsPopup();
+        });
+      }
+      final info = await PackageInfo.fromPlatform();
+      packageInfo = info;
+      setState(() {});
     });
     super.initState();
   }
@@ -52,8 +81,8 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
                 new Color(0xFF2343DC),
                 new Color(0xFF01B7DC),
               ],
-              begin: const FractionalOffset(0.0, 0.0),
-              end: const FractionalOffset(0.0, 1.0),
+              begin: FractionalOffset(0.0, 0.0),
+              end: FractionalOffset(0.0, 1.0),
             ),
           ),
           child: AppBar(
@@ -219,24 +248,37 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
   );
 
   buildMenu() {
-    return SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(vertical: 50.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            ListTile(
-              title: Text('Share the App', style: Style.drawerTextStyle),
-              leading: const Icon(Icons.share, color: Colors.white),
-              onTap: () => _sharer(),
-            ),
-            ListTile(
-              title: Text('More App', style: Style.drawerTextStyle),
-              leading: const Icon(Icons.apps, color: Colors.white),
-              onTap: () => _moreApp(),
-            ),
-          ],
-        ));
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: 50.0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          ListTile(
+            title: Text('Share the App', style: Style.drawerTextStyle),
+            leading: Icon(Icons.share, color: Colors.white),
+            onTap: () => _sharer(),
+          ),
+          ListTile(
+            title: Text('Rate Us', style: Style.drawerTextStyle),
+            leading: Icon(Icons.star_rate, color: Colors.white),
+            onTap: () => _rateUs(),
+          ),
+          ListTile(
+            title: Text('Privacy Policy', style: Style.drawerTextStyle),
+            leading: Icon(Icons.privacy_tip, color: Colors.white),
+            onTap: () => _privacyPolicy(),
+          ),
+          ListTile(
+            title: Text('More App', style: Style.drawerTextStyle),
+            leading: Icon(Icons.apps, color: Colors.white),
+            onTap: () => _moreApp(),
+          ),
+          Spacer(),
+          Text("Version Name: " + packageInfo.version,style: Style.drawerTextStyle),
+        ],
+      ),
+    );
   }
 
   _sharer() {
@@ -252,6 +294,67 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
         'https://play.google.com/store/apps/developer?id=UniqueApp+Technologies&hl=en-IN');
     if (!await launchUrl(_url)) {
       throw 'Could not launch $_url';
+    }
+  }
+
+  _rateUs() {
+    rateMyApp.init().then((value) {
+      rateMyApp.launchStore();
+      Get.back();
+    });
+  }
+
+  Future<bool> shouldShowPopup() async {
+    String lastDisplayDate = box.read("lastDisplayDate") ?? "";
+    if (lastDisplayDate.isEmpty) {
+      String currentDate = DateTime.now().toString();
+      box.write("lastDisplayDate", currentDate);
+      return true;
+    } else {
+      DateTime currentDate = DateTime.now();
+      DateTime lastDate = DateTime.parse(lastDisplayDate);
+      int differenceInDays = currentDate.difference(lastDate).inDays;
+      if (differenceInDays >= 7) {
+        box.write("lastDisplayDate", currentDate.toString());
+        return true;
+      } else {
+        return false;
+      }
+    }
+  }
+
+  ShowRateUsPopup() {
+    rateMyApp.showRateDialog(
+      context,
+      title: 'Rate this app',
+      message: 'If you like this app, please take a little bit of your time to review it !\nIt really helps us and it shouldn\'t take you more than one minute.',
+      rateButton: 'RATE',
+      noButton: 'NO THANKS',
+      laterButton: 'MAYBE LATER',
+      listener: (button) {
+        switch (button) {
+          case RateMyAppDialogButton.rate:
+            print('Clicked on "Rate".');
+            break;
+          case RateMyAppDialogButton.later:
+            print('Clicked on "Later".');
+            break;
+          case RateMyAppDialogButton.no:
+            print('Clicked on "No".');
+            break;
+        }
+        return true;
+      },
+      ignoreNativeDialog: Platform.isAndroid,
+      dialogStyle: DialogStyle(),
+      onDismissed: () => rateMyApp.callEvent(RateMyAppEventType.laterButtonPressed),
+    );
+  }
+
+  _privacyPolicy() async {
+    final Uri _url = Uri.parse('https://sites.google.com/view/uniqueapp-privacy-policy/policy');
+    if (!await launchUrl(_url)) {
+    throw 'Could not launch $_url';
     }
   }
 }

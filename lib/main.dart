@@ -11,7 +11,6 @@ import 'package:toughest_new/constants/app_module.dart';
 import 'package:toughest_new/constants/sizeConstant.dart';
 import 'package:toughest_new/database/FirebaseDatabase_controller.dart';
 import 'package:toughest_new/ui/splashscreen.dart';
-
 import 'firebase_options.dart';
 
 Future<void> main() async {

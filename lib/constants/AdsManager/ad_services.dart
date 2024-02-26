@@ -76,20 +76,23 @@ class AdService {
   }
 
   loadInterstitialAd() {
-    InterstitialAd.load(
-      adUnitId: InterstitialID.toString().trim(),
-      request: AdRequest(),
-      adLoadCallback: InterstitialAdLoadCallback(
-        onAdLoaded: (ad) {
-          interstitialAds = ad;
-        },
-        onAdFailedToLoad: (error) {
-          interStitialAdRunning.value = false;
-          print('InterstitialAd failed to load: $error');
-          print("InterstitialID:-  " + InterstitialID.toString().trim());
-        },
-      ),
-    );
+    isVisible.value = interstitial.value;
+    if (isVisible.isTrue){
+      InterstitialAd.load(
+        adUnitId: InterstitialID.toString().trim(),
+        request: AdRequest(),
+        adLoadCallback: InterstitialAdLoadCallback(
+          onAdLoaded: (ad) {
+            interstitialAds = ad;
+          },
+          onAdFailedToLoad: (error) {
+            interStitialAdRunning.value = false;
+            print('InterstitialAd failed to load: $error');
+            print("InterstitialID:-  " + InterstitialID.toString().trim());
+          },
+        ),
+      );
+    }
   }
 
   // Get Difference Time For Interstitial
@@ -135,8 +138,7 @@ class AdService {
   }
 }
 
-Future<AnchoredAdaptiveBannerAdSize?> anchoredAdaptiveBannerAdSize(
-    BuildContext context) async {
+Future<AnchoredAdaptiveBannerAdSize?> anchoredAdaptiveBannerAdSize(BuildContext context) async {
   return await AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(
       MediaQuery.of(context).size.width.toInt());
 }

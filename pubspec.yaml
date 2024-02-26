@@ -47,6 +47,8 @@ dependencies:
   get_storage: ^2.1.1
   google_mobile_ads: any
   cached_network_image: ^3.3.0
+  rate_my_app: ^1.1.1
+  package_info_plus: ^5.0.1
 
 dev_dependencies:
   flutter_test:

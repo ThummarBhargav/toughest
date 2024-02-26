@@ -1,3 +1,4 @@
+import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:toughest_new/constants/AdsManager/ad_services.dart';
 import 'package:toughest_new/constants/api_constants.dart';
@@ -11,21 +12,23 @@ class AppOpenAdManager {
   String adUnitId = AppOpenID.toString().trim();
 
   void loadAd() {
-    AppOpenAd.load(
-      adUnitId: adUnitId,
-      orientation: AppOpenAd.orientationPortrait,
-      request: AdRequest(),
-      adLoadCallback: AppOpenAdLoadCallback(
-        onAdLoaded: (ad) {
-          print('$ad loaded');
-          _appOpenLoadTime = DateTime.now();
-          _appOpenAd = ad;
-        },
-        onAdFailedToLoad: (error) {
-          print('AppOpenAd failed to load: $error');
-        },
-      ),
-    );
+    if(appOpen.isTrue){
+      AppOpenAd.load(
+        adUnitId: adUnitId,
+        orientation: AppOpenAd.orientationPortrait,
+        request: AdRequest(),
+        adLoadCallback: AppOpenAdLoadCallback(
+          onAdLoaded: (ad) {
+            print('$ad loaded');
+            _appOpenLoadTime = DateTime.now();
+            _appOpenAd = ad;
+          },
+          onAdFailedToLoad: (error) {
+            print('AppOpenAd failed to load: $error');
+          },
+        ),
+      );
+    }
   }
 
   bool get isAdAvailable {

@@ -49,7 +49,8 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
       await getIt<AdService>().initBannerAds(context);
       await getIt<AdService>().loadInterstitialAd();
       AppOpenAdManager appOpenAdManager = AppOpenAdManager()..loadAd();
-      appLifecycleReactor = AppLifecycleReactor(appOpenAdManager: appOpenAdManager);
+      appLifecycleReactor =
+          AppLifecycleReactor(appOpenAdManager: appOpenAdManager);
       if (appLifecycleReactor != null) {
         appLifecycleReactor!.listenToAppStateChanges();
       }
@@ -275,23 +276,35 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
             onTap: () => _moreApp(),
           ),
           Spacer(),
-          Text("Version Name: " + packageInfo.version,style: Style.drawerTextStyle),
+          Text("Version Name: " + packageInfo.version,
+              style: Style.drawerTextStyle),
         ],
       ),
     );
   }
 
   _sharer() {
-    Share.share("Skills 101/Smart skills Learn and Grow - Test your knowledge.\n" +
-        "The app that will make you an amazing candidate for any job.\n"
-            "Are you ready?\n"
-            "Download it now\n"
-            "https://play.google.com/store/apps/details?id=interview.preparation.question.answer");
+    if (Platform.isIOS) {
+      Share.share(
+          "Skills 101/Smart skills Learn and Grow - Test your knowledge.\n" +
+              "The app that will make you an amazing candidate for any job.\n"
+                  "Are you ready?\n"
+                  "Download it now\n"
+                  "https://play.google.com/store/apps/details?id=interview.preparation.question.answer");
+    } else {
+      Share.share(
+          "Skills 101/Smart skills Learn and Grow - Test your knowledge.\n" +
+              "The app that will make you an amazing candidate for any job.\n"
+                  "Are you ready?\n"
+                  "Download it now\n"
+                  "https://play.google.com/store/apps/details?id=interview.preparation.question.answer");
+    }
   }
 
   _moreApp() async {
-    final Uri _url = Uri.parse(
-        'https://play.google.com/store/apps/developer?id=UniqueApp+Technologies&hl=en-IN');
+    final Uri _url = Uri.parse((Platform.isIOS)
+        ? "https://apps.apple.com/in/developer/deep-jerajbhai-davara/id1683267123"
+        : 'https://play.google.com/store/apps/developer?id=UniqueApp+Technologies&hl=en-IN');
     if (!await launchUrl(_url)) {
       throw 'Could not launch $_url';
     }
@@ -327,7 +340,8 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
     rateMyApp.showRateDialog(
       context,
       title: 'Rate this app',
-      message: 'If you like this app, please take a little bit of your time to review it !\nIt really helps us and it shouldn\'t take you more than one minute.',
+      message:
+          'If you like this app, please take a little bit of your time to review it !\nIt really helps us and it shouldn\'t take you more than one minute.',
       rateButton: 'RATE',
       noButton: 'NO THANKS',
       laterButton: 'MAYBE LATER',
@@ -347,14 +361,16 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
       },
       ignoreNativeDialog: Platform.isAndroid,
       dialogStyle: DialogStyle(),
-      onDismissed: () => rateMyApp.callEvent(RateMyAppEventType.laterButtonPressed),
+      onDismissed: () =>
+          rateMyApp.callEvent(RateMyAppEventType.laterButtonPressed),
     );
   }
 
   _privacyPolicy() async {
-    final Uri _url = Uri.parse('https://sites.google.com/view/uniqueapp-privacy-policy/policy');
+    final Uri _url = Uri.parse(
+        'https://sites.google.com/view/uniqueapp-privacy-policy/policy');
     if (!await launchUrl(_url)) {
-    throw 'Could not launch $_url';
+      throw 'Could not launch $_url';
     }
   }
 }

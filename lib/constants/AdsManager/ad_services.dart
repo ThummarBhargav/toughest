@@ -2,33 +2,32 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:toughest_new/constants/api_constants.dart';
-import 'package:toughest_new/main.dart';
+
+import '../../main.dart';
+import '../api_constants.dart';
 
 class AdService {
   static RxBool isVisible = false.obs;
   BannerAd? bannerAd;
-  bool isBannerLoaded = false;
+  RxBool isBannerLoaded = false.obs;
   InterstitialAd? interstitialAds;
   AnchoredAdaptiveBannerAdSize? size;
 
   // BannerAds
-  initBannerAds(context) async {
-    isVisible.value = banner;
+  initBannerAds(BuildContext context) async {
+    isVisible.value = banner.value;
     if (isVisible.isTrue) {
       size = await anchoredAdaptiveBannerAdSize(context);
-
       bannerAd = BannerAd(
-          size: (adaptiveBannerSize)
-              ? size!
-              : AdSize.banner,
+          size: (adaptiveBannerSize.value) ? size! : AdSize.banner,
           adUnitId: BannerID.toString().trim(),
           listener: BannerAdListener(
             onAdLoaded: (ad) {
-              isBannerLoaded = true;
+              isBannerLoaded.value = true;
             },
             onAdFailedToLoad: (ad, error) {
-              print('Ad load failed (code=${error.code} message=${error.message})');
+              print(
+                  'Ad load failed (code=${error.code} message=${error.message})');
               ad.dispose();
               initBannerAds(context);
             },
@@ -48,22 +47,23 @@ class AdService {
 
   // InterstitialAds Load & Show
   showInterstitialAd() {
-    isVisible.value = interstitial;
+    isVisible.value = interstitial.value;
     if (isVisible.isTrue) {
-      interStitialAdRunning = true;
-      if (interStitialAdRunning == true) {
+      interStitialAdRunning.value = true;
+      if (interStitialAdRunning.isTrue) {
         interstitialAds?.fullScreenContentCallback = FullScreenContentCallback(
           onAdShowedFullScreenContent: (ad) =>
               print('Ad showed fullscreen content.'),
           onAdDismissedFullScreenContent: (ad) {
-            box.write(ArgumentConstant.isStartTime, DateTime.now().millisecondsSinceEpoch.toString());
+            box.write(ArgumentConstant.isStartTime,
+                DateTime.now().millisecondsSinceEpoch.toString());
             interstitialAds?.dispose();
-            interStitialAdRunning = false;
+            interStitialAdRunning.value = false;
             loadInterstitialAd();
             print('Ad dismissed fullscreen content.');
           },
           onAdFailedToShowFullScreenContent: (ad, error) {
-            interStitialAdRunning = false;
+            interStitialAdRunning.value = false;
             print('Ad failed to show fullscreen content: $error');
           },
         );
@@ -84,7 +84,7 @@ class AdService {
           interstitialAds = ad;
         },
         onAdFailedToLoad: (error) {
-          interStitialAdRunning = false;
+          interStitialAdRunning.value = false;
           print('InterstitialAd failed to load: $error');
           print("InterstitialID:-  " + InterstitialID.toString().trim());
         },
@@ -102,7 +102,7 @@ class AdService {
       print("StartTime := $startTime");
       print("currentDate := $currentTime");
       int differenceTime = difference ~/ 1000;
-      if (differenceTime > interShowTime) {
+      if (differenceTime > interShowTime.value) {
         showInterstitialAd();
       }
     }
@@ -111,14 +111,15 @@ class AdService {
   // Get Difference Time For AppOpen
   bool getDifferenceAppOpenTime() {
     if (box.read(ArgumentConstant.isAppOpenStartTime) != null) {
-      String startTime = box.read(ArgumentConstant.isAppOpenStartTime).toString();
+      String startTime =
+          box.read(ArgumentConstant.isAppOpenStartTime).toString();
       String currentTime = DateTime.now().millisecondsSinceEpoch.toString();
       int difference = int.parse(currentTime) - int.parse(startTime);
       print("Difference := $difference");
       print("StartTime := $startTime");
       print("currentDate := $currentTime");
       int differenceTime = difference ~/ 1000;
-      if (differenceTime > appOpenShowTime) {
+      if (differenceTime > appOpenShowTime.value) {
         return true;
       } else {
         return false;
@@ -130,10 +131,12 @@ class AdService {
 
   // Dispose
   dispose() {
-    bannerAd?.dispose().then((value) => isBannerLoaded = false);
+    bannerAd?.dispose().then((value) => isBannerLoaded.value = false);
   }
 }
 
-Future<AnchoredAdaptiveBannerAdSize?> anchoredAdaptiveBannerAdSize(context) async {
-  return await AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(MediaQuery.of(context).size.width.toInt());
+Future<AnchoredAdaptiveBannerAdSize?> anchoredAdaptiveBannerAdSize(
+    BuildContext context) async {
+  return await AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(
+      MediaQuery.of(context).size.width.toInt());
 }

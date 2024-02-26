@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:get_it/get_it.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
@@ -30,17 +31,19 @@ Future<void> main() async {
   runApp(Home());
 }
 
-bool appOpen = false;
-bool banner = false;
-bool interstitial = false;
+RxBool appOpen = false.obs;
+RxBool banner = false.obs;
+RxBool interstitial = false.obs;
+RxBool native = false.obs;
 bool appOpenAdRunning = false;
-bool interStitialAdRunning = false;
-String AppOpenID = "";
-String BannerID = "";
-String InterstitialID = "";
-int interShowTime = 0;
-int appOpenShowTime = 0;
-bool adaptiveBannerSize = false;
+RxBool interStitialAdRunning = false.obs;
+RxString AppOpenID = "".obs;
+RxString BannerID = "".obs;
+RxString InterstitialID = "".obs;
+RxString NativeID = "".obs;
+RxInt interShowTime = 0.obs;
+RxInt appOpenShowTime = 0.obs;
+RxBool adaptiveBannerSize = false.obs;
 
 final box = GetStorage();
 final getIt = GetIt.instance;

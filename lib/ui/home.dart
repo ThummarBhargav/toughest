@@ -1,5 +1,6 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:shrink_sidemenu/shrink_sidemenu.dart';
 import 'package:toughest_new/constants/AdsManager/ad_services.dart';
@@ -42,147 +43,164 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     return Scaffold(
-        key: _sideMenuKey,
-        appBar: PreferredSize(
-          preferredSize: Size.fromHeight(AppBar().preferredSize.height),
-          child: Container(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: <Color>[
-                  new Color(0xFF2343DC),
-                  new Color(0xFF01B7DC),
-                ],
-                begin: const FractionalOffset(0.0, 0.0),
-                end: const FractionalOffset(0.0, 1.0),
-              ),
-            ),
-            child: AppBar(
-              elevation: 10.0,
-              leading: Container(),
-              centerTitle: true,
-              actions: [
-                IconButton(
-                  icon: Icon(Icons.menu),
-                  onPressed: () {
-                    _sideMenuKey.currentState!.openEndDrawer();
-                  },
-                ),
+      key: _sideMenuKey,
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(AppBar().preferredSize.height),
+        child: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: <Color>[
+                new Color(0xFF2343DC),
+                new Color(0xFF01B7DC),
               ],
-              backgroundColor: Colors.transparent,
-              title: Text('TOUGHEST'),
+              begin: const FractionalOffset(0.0, 0.0),
+              end: const FractionalOffset(0.0, 1.0),
             ),
           ),
-        ),
-        endDrawer: Drawer(
-          child: Container(
-            color: Colors.blue,
-            child: buildMenu(),
-          ),
-        ),
-        body: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                key: Key('banner'),
-                padding: EdgeInsets.only(bottom: 5.0),
-                height: height / 3,
-                child: myCarousel,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Expanded(
-                    child: InkWell(
-                      onTap: () {
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => Detail(
-                                  title: 'Behavioural Based',
-                                )));
-                      },
-                      child: Image.asset(
-                        'assets/images/Behavioural Based.png',
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    width: 10,
-                  ),
-                  Expanded(
-                    child: InkWell(
-                      onTap: () {
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => Detail(
-                                  title: 'Situational Based',
-                                )));
-                      },
-                      child: Image.asset(
-                        'assets/images/communications Based.png',
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Expanded(
-                    child: InkWell(
-                      onTap: () {
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => Detail(
-                                  title: 'Opinion Based',
-                                )));
-                      },
-                      child: Image.asset(
-                        'assets/images/opinion Based.png',
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    width: 10,
-                  ),
-                  Expanded(
-                    child: InkWell(
-                      onTap: () {
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => Detail(
-                                  title: 'Performance Based',
-                                )));
-                      },
-                      child: Image.asset(
-                        'assets/images/performance Based.png',
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              InkWell(
-                onTap: () {
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => Detail(
-                            title: 'Brainteasers',
-                          )));
+          child: AppBar(
+            elevation: 10.0,
+            actions: [
+              IconButton(
+                icon: Icon(Icons.menu),
+                onPressed: () {
+                  _sideMenuKey.currentState!.openEndDrawer();
                 },
-                child: Image.asset(
-                  'assets/images/Brainteasers.png',
-                ),
               ),
             ],
+            backgroundColor: Colors.transparent,
+            title: Text('Smart skills Learn and Grow'),
           ),
         ),
-        bottomNavigationBar: banner == true
+      ),
+      endDrawer: Drawer(
+        child: Container(
+          color: Colors.blue,
+          child: buildMenu(),
+        ),
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              key: Key('banner'),
+              padding: EdgeInsets.only(bottom: 5.0),
+              height: height / 3,
+              child: myCarousel,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Expanded(
+                  child: InkWell(
+                    onTap: () async {
+                      if (getIt<AdService>().bannerAd != null) {
+                        await getIt<AdService>().bannerAd!.dispose();
+                        await getIt<AdService>().initBannerAds(context);
+                      }
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => Detail(
+                                title: 'Behavioural Based',
+                              )));
+                    },
+                    child: Image.asset(
+                      'assets/images/Behavioural Based.png',
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: 10,
+                ),
+                Expanded(
+                  child: InkWell(
+                    onTap: () async {
+                      if (getIt<AdService>().bannerAd != null) {
+                        await getIt<AdService>().bannerAd!.dispose();
+                        await getIt<AdService>().initBannerAds(context);
+                      }
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => Detail(
+                                title: 'Situational Based',
+                              )));
+                    },
+                    child: Image.asset(
+                      'assets/images/communications Based.png',
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Expanded(
+                  child: InkWell(
+                    onTap: () async {
+                      if (getIt<AdService>().bannerAd != null) {
+                        await getIt<AdService>().bannerAd!.dispose();
+                        await getIt<AdService>().initBannerAds(context);
+                      }
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => Detail(
+                                title: 'Opinion Based',
+                              )));
+                    },
+                    child: Image.asset(
+                      'assets/images/opinion Based.png',
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: 10,
+                ),
+                Expanded(
+                  child: InkWell(
+                    onTap: () async {
+                      if (getIt<AdService>().bannerAd != null) {
+                        await getIt<AdService>().bannerAd!.dispose();
+                        await getIt<AdService>().initBannerAds(context);
+                      }
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => Detail(
+                                title: 'Performance Based',
+                              )));
+                    },
+                    child: Image.asset(
+                      'assets/images/performance Based.png',
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            InkWell(
+              onTap: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => Detail(
+                          title: 'Brainteasers',
+                        )));
+              },
+              child: Image.asset(
+                'assets/images/Brainteasers.png',
+              ),
+            ),
+          ],
+        ),
+      ),
+      bottomNavigationBar: Obx(
+        () => (banner.value == true)
             ? getIt<AdService>().isBannerLoaded == true
                 ? getIt<AdService>().getBannerAds()
                 : SizedBox()
-            : SizedBox());
+            : SizedBox(),
+      ),
+    );
   }
 
   ///creating a carousel using carousel pro library.
@@ -214,25 +232,25 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
               onTap: () => _sharer(),
             ),
             ListTile(
-              title: Text('Suggestions', style: Style.drawerTextStyle),
+              title: Text('More App', style: Style.drawerTextStyle),
               leading: const Icon(Icons.bug_report, color: Colors.white),
-              onTap: () => _launchgmail(),
+              onTap: () => _moreApp(),
             ),
           ],
         ));
   }
 
   _sharer() {
-    Share.share("Skills 101/TOUGHEST - Test your knowledge.\n" +
+    Share.share("Skills 101/Smart skills Learn and Grow - Test your knowledge.\n" +
         "The app that will make you an amazing candidate for any job.\n"
             "Are you ready?\n"
             "Download it now\n"
-            "https://play.google.com/store/apps/details?id=tricky.questions");
+            "https://play.google.com/store/apps/details?id=interview.preparation.question.answer");
   }
 
-  _launchgmail() async {
+  _moreApp() async {
     final Uri _url = Uri.parse(
-        'mailto:indiancoder001@gmail.com?subject=Feedback&body=Feedback for Toughest');
+        'https://play.google.com/store/apps/developer?id=UniqueApp+Technologies&hl=en-IN');
     if (!await launchUrl(_url)) {
       throw 'Could not launch $_url';
     }

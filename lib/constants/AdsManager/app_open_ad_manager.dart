@@ -2,6 +2,7 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:toughest_new/constants/AdsManager/ad_services.dart';
 import 'package:toughest_new/constants/api_constants.dart';
 import 'package:toughest_new/main.dart';
+
 class AppOpenAdManager {
   final Duration maxCacheDuration = Duration(hours: 4);
   DateTime? _appOpenLoadTime;
@@ -69,12 +70,15 @@ class AppOpenAdManager {
       },
     );
 
-    (appOpen)
-        ? (interStitialAdRunning == false)
+    (appOpen.value)
+        ? (interStitialAdRunning.value == false)
             ? appOpenAdRunning == true
                 ? null
                 : getIt<AdService>().getDifferenceAppOpenTime()
-                    ? _appOpenAd!.show().then((value) {box.write(ArgumentConstant.isAppOpenStartTime, DateTime.now().millisecondsSinceEpoch.toString());})
+                    ? _appOpenAd!.show().then((value) {
+                        box.write(ArgumentConstant.isAppOpenStartTime,
+                            DateTime.now().millisecondsSinceEpoch.toString());
+                      })
                     : null
             : null
         : null;

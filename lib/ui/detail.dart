@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
+import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:toughest_new/ui/showDetail.dart';
 import 'dart:convert';
 
 import '../commons/textStyle.dart';
+import '../constants/AdsManager/ad_services.dart';
+import '../main.dart';
 import '../models/items.dart';
 
 class Detail extends StatelessWidget {
@@ -13,36 +16,53 @@ class Detail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
-      appBar: AppBar(
-        elevation: 20.0,
-        backgroundColor: Color(0xff1764db),
-        title: Text(
-          'Questions',
-        ),
-      ),
-      body: Flex(
-        direction: Axis.vertical,
-        children: <Widget>[
-          Flexible(
-            child: Container(
-              child: buildListItems(),
-              decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                colors: <Color>[
-                  new Color(0xFF2343DC),
-                  new Color(0xFF0969CF),
-                  new Color(0xFF2577ED),
-                  new Color(0xFF12B6D3),
-                  new Color(0xFF01B7DC),
-                ],
-                // stops: [1.0,1.0,0.9],
-                begin: const FractionalOffset(0.0, 0.0),
-                end: const FractionalOffset(0.0, 1.0),
-              )),
-            ),
+    return WillPopScope(
+      onWillPop: () async {
+        if (getIt<AdService>().bannerAd != null) {
+          await getIt<AdService>().bannerAd!.dispose();
+          await getIt<AdService>().initBannerAds(context);
+        }
+        getIt<AdService>().getDifferenceTime();
+        return await true;
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          elevation: 20.0,
+          backgroundColor: Color(0xff1764db),
+          title: Text(
+            'Questions',
           ),
-        ],
+        ),
+        body: Flex(
+          direction: Axis.vertical,
+          children: <Widget>[
+            Flexible(
+              child: Container(
+                child: buildListItems(),
+                decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                  colors: <Color>[
+                    new Color(0xFF2343DC),
+                    new Color(0xFF0969CF),
+                    new Color(0xFF2577ED),
+                    new Color(0xFF12B6D3),
+                    new Color(0xFF01B7DC),
+                  ],
+                  // stops: [1.0,1.0,0.9],
+                  begin: const FractionalOffset(0.0, 0.0),
+                  end: const FractionalOffset(0.0, 1.0),
+                )),
+              ),
+            ),
+          ],
+        ),
+        bottomNavigationBar: Obx(
+          () => (banner.value == true)
+              ? getIt<AdService>().isBannerLoaded == true
+                  ? getIt<AdService>().getBannerAds()
+                  : SizedBox()
+              : SizedBox(),
+        ),
       ),
     );
   }
@@ -135,12 +155,17 @@ class Detail extends StatelessWidget {
                       iconSize: 18.0,
                       onPressed: () => share(quest),
                     ),
-                    onTap: () => Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) =>
-                            ShowDetail(quest: quest, ans: ans),
-                      ),
-                    ),
+                    onTap: () async {
+                      if (getIt<AdService>().bannerAd != null) {
+                        await getIt<AdService>().bannerAd!.dispose();
+                        await getIt<AdService>().initBannerAds(context);
+                      }
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => ShowDetail(
+                                quest: quest,
+                                ans: ans,
+                              )));
+                    },
                   ),
                   Container(
                       padding: EdgeInsets.only(left: 15, right: 15),

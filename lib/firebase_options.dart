@@ -60,11 +60,11 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyBqJUUmUILglDY94aXNqu82bGOZVUj_B1I',
-    appId: '1:630805778505:ios:2c12676ffac7ff0c836f98',
+    appId: '1:630805778505:ios:0c8e1347545c1270836f98',
     messagingSenderId: '630805778505',
     projectId: 'toughest-8d8da',
     databaseURL: 'https://toughest-8d8da-default-rtdb.firebaseio.com',
     storageBucket: 'toughest-8d8da.appspot.com',
-    iosBundleId: 'com.example.toughestNew',
+    iosBundleId: 'interview.preparation.question.answer',
   );
 }

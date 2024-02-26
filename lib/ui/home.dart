@@ -2,7 +2,6 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:share_plus/share_plus.dart';
-import 'package:shrink_sidemenu/shrink_sidemenu.dart';
 import 'package:toughest_new/constants/AdsManager/ad_services.dart';
 import 'package:toughest_new/constants/AdsManager/app_lifecycle_reactor.dart';
 import 'package:toughest_new/constants/AdsManager/app_open_ad_manager.dart';
@@ -233,7 +232,7 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
             ),
             ListTile(
               title: Text('More App', style: Style.drawerTextStyle),
-              leading: const Icon(Icons.bug_report, color: Colors.white),
+              leading: const Icon(Icons.apps, color: Colors.white),
               onTap: () => _moreApp(),
             ),
           ],

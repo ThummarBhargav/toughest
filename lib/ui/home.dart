@@ -15,10 +15,12 @@ class Home extends StatefulWidget {
 
 class HomeState extends State<Home> with TickerProviderStateMixin {
   var data;
+  final GlobalKey<ScaffoldState> _sideMenuKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     return Scaffold(
+      key: _sideMenuKey,
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(AppBar().preferredSize.height),
         child: Container(
@@ -34,11 +36,14 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
           ),
           child: AppBar(
             elevation: 10.0,
+            leading: Container(),
             centerTitle: true,
             actions: [
               IconButton(
                 icon: Icon(Icons.menu),
-                onPressed: () {},
+                onPressed: () {
+                  _sideMenuKey.currentState!.openEndDrawer();
+                },
               ),
             ],
             backgroundColor: Colors.transparent,
@@ -46,29 +51,12 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
           ),
         ),
       ),
-      // appBar: AppBar(
-      //   elevation: 10.0,
-      //   centerTitle: true,
-      //   backgroundColor: Colors.white,
-      //   leading: GestureDetector(
-      //     child: Icon(
-      //       Icons.menu,
-      //       color: Colors.black,
-      //     ),
-      //     onTap: () {
-      //       // final _state = _sideMenuKey.currentState!;
-      //       // if (_state.isOpened) {
-      //       //   _state.closeSideMenu();
-      //       // } else {
-      //       //   _state.openSideMenu();
-      //       // }
-      //     },
-      //   ),
-      //   title: new Text(
-      //     'TOUGHEST',
-      //     style: TextStyle(color: Colors.black),
-      //   ),
-      // ),
+      endDrawer: Drawer(
+        child: Container(
+          color: Colors.blue,
+          child: buildMenu(),
+        ),
+      ),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,

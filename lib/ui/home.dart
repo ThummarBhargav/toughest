@@ -303,7 +303,7 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
 
   _moreApp() async {
     final Uri _url = Uri.parse((Platform.isIOS)
-        ? "https://apps.apple.com/in/developer/deep-jerajbhai-davara/id1683267123"
+        ? "https://apps.apple.com/in/developer/deep-jerajbhai-davara/id1683267123?see-all=i-phonei-pad-apps"
         : 'https://play.google.com/store/apps/developer?id=UniqueApp+Technologies&hl=en-IN');
     if (!await launchUrl(_url)) {
       throw 'Could not launch $_url';

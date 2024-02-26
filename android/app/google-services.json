@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "630805778505",
+    "firebase_url": "https://toughest-8d8da-default-rtdb.firebaseio.com",
+    "project_id": "toughest-8d8da",
+    "storage_bucket": "toughest-8d8da.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:630805778505:android:6a184e00fa9622ae836f98",
+        "android_client_info": {
+          "package_name": "interview.preparation.question.answer"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB62P_1W8lToBqm6MjItvJSdBHQsRkPG_w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

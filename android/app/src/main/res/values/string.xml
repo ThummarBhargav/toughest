@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Toughest</string>
+    <string name="adsID">ca-app-pub-8608272927918158~7040920649</string>
+    <string name="package_name">interview.preparation.question.answer</string>
+    <string name="dbName">Toughest</string>
+</resources>

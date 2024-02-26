@@ -12,6 +12,7 @@ import 'package:toughest_new/constants/AdsManager/app_open_ad_manager.dart';
 import 'package:toughest_new/main.dart';
 import 'package:toughest_new/ui/detail.dart';
 import 'package:toughest_new/commons/textStyle.dart';
+import 'package:upgrader/upgrader.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class Home extends StatefulWidget {
@@ -71,163 +72,165 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
-    return Scaffold(
-      key: _sideMenuKey,
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(AppBar().preferredSize.height),
-        child: Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: <Color>[
-                new Color(0xFF2343DC),
-                new Color(0xFF01B7DC),
+    return UpgradeAlert(
+      child: Scaffold(
+        key: _sideMenuKey,
+        appBar: PreferredSize(
+          preferredSize: Size.fromHeight(AppBar().preferredSize.height),
+          child: Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: <Color>[
+                  new Color(0xFF2343DC),
+                  new Color(0xFF01B7DC),
+                ],
+                begin: FractionalOffset(0.0, 0.0),
+                end: FractionalOffset(0.0, 1.0),
+              ),
+            ),
+            child: AppBar(
+              elevation: 10.0,
+              actions: [
+                IconButton(
+                  icon: Icon(Icons.menu),
+                  onPressed: () {
+                    _sideMenuKey.currentState!.openEndDrawer();
+                  },
+                ),
               ],
-              begin: FractionalOffset(0.0, 0.0),
-              end: FractionalOffset(0.0, 1.0),
+              backgroundColor: Colors.transparent,
+              title: Text('Smart skills Learn and Grow'),
             ),
           ),
-          child: AppBar(
-            elevation: 10.0,
-            actions: [
-              IconButton(
-                icon: Icon(Icons.menu),
-                onPressed: () {
-                  _sideMenuKey.currentState!.openEndDrawer();
+        ),
+        endDrawer: Drawer(
+          child: Container(
+            color: Colors.blue,
+            child: buildMenu(),
+          ),
+        ),
+        body: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                key: Key('banner'),
+                padding: EdgeInsets.only(bottom: 5.0),
+                height: height / 3,
+                child: myCarousel,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Expanded(
+                    child: InkWell(
+                      onTap: () async {
+                        if (getIt<AdService>().bannerAd != null) {
+                          await getIt<AdService>().bannerAd!.dispose();
+                          await getIt<AdService>().initBannerAds(context);
+                        }
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => Detail(
+                                  title: 'Behavioural Based',
+                                )));
+                      },
+                      child: Image.asset(
+                        'assets/images/Behavioural Based.png',
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  Expanded(
+                    child: InkWell(
+                      onTap: () async {
+                        if (getIt<AdService>().bannerAd != null) {
+                          await getIt<AdService>().bannerAd!.dispose();
+                          await getIt<AdService>().initBannerAds(context);
+                        }
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => Detail(
+                                  title: 'Situational Based',
+                                )));
+                      },
+                      child: Image.asset(
+                        'assets/images/communications Based.png',
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Expanded(
+                    child: InkWell(
+                      onTap: () async {
+                        if (getIt<AdService>().bannerAd != null) {
+                          await getIt<AdService>().bannerAd!.dispose();
+                          await getIt<AdService>().initBannerAds(context);
+                        }
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => Detail(
+                                  title: 'Opinion Based',
+                                )));
+                      },
+                      child: Image.asset(
+                        'assets/images/opinion Based.png',
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  Expanded(
+                    child: InkWell(
+                      onTap: () async {
+                        if (getIt<AdService>().bannerAd != null) {
+                          await getIt<AdService>().bannerAd!.dispose();
+                          await getIt<AdService>().initBannerAds(context);
+                        }
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => Detail(
+                                  title: 'Performance Based',
+                                )));
+                      },
+                      child: Image.asset(
+                        'assets/images/performance Based.png',
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              InkWell(
+                onTap: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => Detail(
+                            title: 'Brainteasers',
+                          )));
                 },
+                child: Image.asset(
+                  'assets/images/Brainteasers.png',
+                ),
               ),
             ],
-            backgroundColor: Colors.transparent,
-            title: Text('Smart skills Learn and Grow'),
           ),
         ),
-      ),
-      endDrawer: Drawer(
-        child: Container(
-          color: Colors.blue,
-          child: buildMenu(),
+        bottomNavigationBar: Obx(
+          () => (banner.value == true)
+              ? getIt<AdService>().isBannerLoaded == true
+                  ? getIt<AdService>().getBannerAds()
+                  : SizedBox()
+              : SizedBox(),
         ),
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              key: Key('banner'),
-              padding: EdgeInsets.only(bottom: 5.0),
-              height: height / 3,
-              child: myCarousel,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Expanded(
-                  child: InkWell(
-                    onTap: () async {
-                      if (getIt<AdService>().bannerAd != null) {
-                        await getIt<AdService>().bannerAd!.dispose();
-                        await getIt<AdService>().initBannerAds(context);
-                      }
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => Detail(
-                                title: 'Behavioural Based',
-                              )));
-                    },
-                    child: Image.asset(
-                      'assets/images/Behavioural Based.png',
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  width: 10,
-                ),
-                Expanded(
-                  child: InkWell(
-                    onTap: () async {
-                      if (getIt<AdService>().bannerAd != null) {
-                        await getIt<AdService>().bannerAd!.dispose();
-                        await getIt<AdService>().initBannerAds(context);
-                      }
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => Detail(
-                                title: 'Situational Based',
-                              )));
-                    },
-                    child: Image.asset(
-                      'assets/images/communications Based.png',
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Expanded(
-                  child: InkWell(
-                    onTap: () async {
-                      if (getIt<AdService>().bannerAd != null) {
-                        await getIt<AdService>().bannerAd!.dispose();
-                        await getIt<AdService>().initBannerAds(context);
-                      }
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => Detail(
-                                title: 'Opinion Based',
-                              )));
-                    },
-                    child: Image.asset(
-                      'assets/images/opinion Based.png',
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  width: 10,
-                ),
-                Expanded(
-                  child: InkWell(
-                    onTap: () async {
-                      if (getIt<AdService>().bannerAd != null) {
-                        await getIt<AdService>().bannerAd!.dispose();
-                        await getIt<AdService>().initBannerAds(context);
-                      }
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => Detail(
-                                title: 'Performance Based',
-                              )));
-                    },
-                    child: Image.asset(
-                      'assets/images/performance Based.png',
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            InkWell(
-              onTap: () {
-                Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => Detail(
-                          title: 'Brainteasers',
-                        )));
-              },
-              child: Image.asset(
-                'assets/images/Brainteasers.png',
-              ),
-            ),
-          ],
-        ),
-      ),
-      bottomNavigationBar: Obx(
-        () => (banner.value == true)
-            ? getIt<AdService>().isBannerLoaded == true
-                ? getIt<AdService>().getBannerAds()
-                : SizedBox()
-            : SizedBox(),
       ),
     );
   }

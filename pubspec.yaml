@@ -49,6 +49,8 @@ dependencies:
   cached_network_image: ^3.3.0
   rate_my_app: ^1.1.1
   package_info_plus: ^5.0.1
+  gdpr_dialog: ^2.1.1
+  upgrader:
 
 dev_dependencies:
   flutter_test:

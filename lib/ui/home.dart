@@ -290,7 +290,7 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
               "The app that will make you an amazing candidate for any job.\n"
                   "Are you ready?\n"
                   "Download it now\n"
-                  "https://play.google.com/store/apps/details?id=interview.preparation.question.answer");
+                  "https://apps.apple.com/in/app/smart-skills-learn-and-grow/id6475261140");
     } else {
       Share.share(
           "Skills 101/Smart skills Learn and Grow - Test your knowledge.\n" +

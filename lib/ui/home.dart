@@ -33,6 +33,7 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
     remindDays: 7,
     remindLaunches: 10,
     googlePlayIdentifier: 'interview.preparation.question.answer',
+    appStoreIdentifier: '6478487364',
   );
   PackageInfo packageInfo = PackageInfo(
     appName: 'Unknown',
@@ -302,6 +303,7 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
                   "Download it now\n"
                   "https://play.google.com/store/apps/details?id=interview.preparation.question.answer");
     }
+    Navigator.pop(context);
   }
 
   _moreApp() async {
@@ -311,12 +313,13 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
     if (!await launchUrl(_url)) {
       throw 'Could not launch $_url';
     }
+    Navigator.pop(context);
   }
 
   _rateUs() {
     rateMyApp.init().then((value) {
       rateMyApp.launchStore();
-      Get.back();
+      Navigator.pop(context);
     });
   }
 
@@ -375,5 +378,6 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
     if (!await launchUrl(_url)) {
       throw 'Could not launch $_url';
     }
+    Navigator.pop(context);
   }
 }

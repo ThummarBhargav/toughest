@@ -20,6 +20,11 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  await GdprDialog.instance
+      .showDialog(isForTest: false, testDeviceId: '')
+      .then((onValue) {
+    print('result === $onValue');
+  });
   FirebaseDatabaseHelper().adsVisible();
   setUp();
   if (isNullEmptyOrFalse(box.read(ArgumentConstant.isStartTime))) {
@@ -41,6 +46,8 @@ RxString AppOpenID = "".obs;
 RxString BannerID = "".obs;
 RxString InterstitialID = "".obs;
 RxString NativeID = "".obs;
+RxString androidAdsId = "".obs;
+RxString iOSAdsId = "".obs;
 RxInt interShowTime = 0.obs;
 RxInt appOpenShowTime = 0.obs;
 RxBool adaptiveBannerSize = false.obs;
@@ -59,39 +66,6 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  static const platform = MethodChannel('samples.flutter.dev/firebase');
-
-  @override
-  void initState() {
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
-      try {
-        await platform.invokeMethod('setId').then((value) async {
-          if (value == "Success") {
-            await MobileAds.instance.initialize();
-            MobileAds.instance.updateRequestConfiguration(
-              RequestConfiguration(
-                tagForChildDirectedTreatment:
-                    TagForChildDirectedTreatment.unspecified,
-                testDeviceIds: kDebugMode
-                    ? [
-                        "921ECDEF8D5D6B5B6CD6F3BC93FF97D7",
-                        "DD9CCC2321C6DDFC5D8E4B67B469A4A7",
-                      ]
-                    : [],
-              ),
-            );
-          }
-        });
-      } on PlatformException catch (e) {
-        print(e);
-      }
-      await GdprDialog.instance.showDialog(isForTest: false, testDeviceId: '').then((onValue) {
-        print('result === $onValue');
-      });
-    });
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(

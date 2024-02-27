@@ -40,6 +40,7 @@ class FirebaseDatabaseHelper {
       print("showAds:-  " + showAds.toString());
       print("testAds:-  " + testAds.toString());
       print("liveAds:-  " + liveAds.toString());
+      print("iOSLiveAds:-  " + iOSLiveAds.toString());
 
       appOpen.value = showAds['appOpenShow'];
       banner.value = showAds['bannerShow'];
